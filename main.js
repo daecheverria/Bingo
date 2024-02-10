@@ -60,8 +60,68 @@ boton_input.addEventListener('click', () => {
         
     })
     if (!nombres_repetidos){
-        MostrarVista("juego")
+        iniciarJuego()
     }else{
         alert("Verifique que ningun nombre se repita")
     }
 })
+
+class Jugador{
+    constructor(id, nombre, pts){
+        this.id = id
+        this.nombre = nombre
+        this.pts = pts
+    }
+}
+let jugadores = []
+let jugador_actual = null
+function iniciarJuego(){
+    MostrarVista("juego")
+    let jugador1 = new Jugador(1, document.getElementById("jugador1").value,1)
+    let jugador2 = new Jugador(2, document.getElementById("jugador2").value,2)
+    let jugador3 = new Jugador(3, document.getElementById("jugador3").value,3)
+    let jugador4 = new Jugador(4, document.getElementById("jugador4").value,4)
+    jugadores.push(jugador1, jugador2, jugador3, jugador4);
+    document.getElementById("jugador_actual").innerText = jugador1.nombre
+    jugador_actual = jugador1
+
+    jugadores.forEach(jugador => {
+    console.log(`ID: ${jugador.id}, Nombre: ${jugador.nombre}, Puntos: ${jugador.pts}`)})
+}
+
+document.querySelector("#boton_izquierda").addEventListener("click", () => {
+    CambioIzquierda()
+});
+
+function BuscarPorId(id) {
+    return jugadores.find(jugador => jugador.id === id);
+}
+
+function CambioIzquierda() {
+    let nuevo_id = 0
+    if(jugador_actual.id===1){
+        nuevo_id = 4
+    } else if(jugador_actual.id>1){
+        nuevo_id = jugador_actual.id - 1
+    }
+    let nuevo_jugador = BuscarPorId(nuevo_id)
+    document.getElementById("jugador_actual").innerText = nuevo_jugador.nombre
+    document.getElementById("puntos").innerText = nuevo_jugador.pts
+    jugador_actual = nuevo_jugador
+}
+document.querySelector("#boton_derecha").addEventListener("click", () => {
+    CambioDerecha()
+});
+
+function CambioDerecha() {
+    let nuevo_id = 0
+    if(jugador_actual.id===4){
+        nuevo_id = 1
+    } else {
+        nuevo_id = jugador_actual.id + 1
+    }
+    let nuevo_jugador = BuscarPorId(nuevo_id)
+    document.getElementById("jugador_actual").innerText = nuevo_jugador.nombre
+    document.getElementById("puntos").innerText = nuevo_jugador.pts
+    jugador_actual = nuevo_jugador
+}
