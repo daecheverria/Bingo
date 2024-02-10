@@ -1,7 +1,39 @@
 body {
-    background-color: aqua;
+    background-color: rgb(15, 70, 189);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-.a {
-    border: solid red 4px;
+.cuadro {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    min-height: 50vh;
+    min-width: 50vh;
+    background-color: orange;
+    border-radius: 4px;
+}
+
+.cuadro h1{
+    margin-bottom: 40px;
+    background-color: brown;
+    border-radius: 4px;
+    padding: 20px;
+    border: solid 4px black;
+}
+
+button {
+    width: 100%;
+    display: inline-block;
+    min-width: 150px;
+    cursor: pointer;
+    padding: 15px 20px;
+    font-weight: bold;
+    border-radius: 4px;
 }
