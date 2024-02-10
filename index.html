@@ -1,17 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bingo</title>
     <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
-    <div class="cuadro">
+    <div class="vista vista_activa" id="home">
         <H1 id="titulo">BINGO</H1>
-        <button>INICIAR</button>
-        <button>PUNTUACIONES</button>
+        <button id="iniciar">INICIAR</button>
+        <button id="puntuaciones">PUNTUACIONES</button>
+    </div>
+    <div class="vista" id="inicio">
+        <label for="jugador1">Ingrese el nombre del jugador 1: </label>
+        <input id="jugador1" placeholder="Ingrese el nombre">
+        <label for="jugador2">Ingrese el nombre del jugador 2: </label>
+        <input id="jugador2" placeholder="Ingrese el nombre">
+        <label for="jugador3">Ingrese el nombre del jugador 3: </label>
+        <input id="jugador3" placeholder="Ingrese el nombre">
+        <label for="jugador4">Ingrese el nombre del jugador 4: </label>
+        <input id="jugador4" placeholder="Ingrese el nombre">
+        <label for="n_bingo">Ingrese el tamaño del tablero (entre 3 y 5): </label>
+        <input id="n_bingo" type="number" max="5" min="3">
+        <div id="inicio_footer">
+            <button class="volver" id="volver_inicio">Volver</button>
+            <button id="inicio_bingo" disabled>Empezar juego</button>
+        </div>
+    </div>
+    <div class="vista" id="tabla">
+        <div>
+            <button class="volver" id="volver_inicio2">Volver</button>
+            <h1>PUNTUACIONES</h1>
+        </div>
+        <tabla></tabla>
     </div>
     <script src="main.js"></script>
 </body>
+
 </html>

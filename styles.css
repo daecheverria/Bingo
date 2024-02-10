@@ -7,7 +7,7 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.cuadro {
+.vista {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,13 +16,18 @@ body {
     padding: 24px;
     min-height: 50vh;
     min-width: 50vh;
-    background-color: orange;
+    background-color: rgb(0, 153, 255);
     border-radius: 4px;
+    border: solid 2px black;
 }
 
-.cuadro h1{
+.vista:not(.vista_activa) {
+    display: none;
+}
+
+#titulo {
     margin-bottom: 40px;
-    background-color: brown;
+    background-color: rgb(76, 87, 248);
     border-radius: 4px;
     padding: 20px;
     border: solid 4px black;
@@ -36,4 +41,18 @@ button {
     padding: 15px 20px;
     font-weight: bold;
     border-radius: 4px;
+}
+
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+#inicio{
+    align-items: start;
+}
+
+#inicio_footer{
+    display: flex;
+    gap: 16px;
 }
