@@ -60,7 +60,7 @@ boton_input.addEventListener('click', () => {
         
     })
     if (!nombres_repetidos){
-        MostrarVista("home")
+        MostrarVista("juego")
     }else{
         alert("Verifique que ningun nombre se repita")
     }
