@@ -43,3 +43,25 @@ function ValidarInputs() {
         const input_completo = Array.from(inputs).every(input => input.value.trim() !== "");
         boton_input.disabled = !input_completo;
 }
+
+const nombres = document.querySelectorAll(".input_jugador");
+
+boton_input.addEventListener('click', () => {
+    const nombres_jugadores = new Set();
+    let nombres_repetidos = false;
+    nombres.forEach(input => {
+        const nombre = input.value.trim();
+        
+            if (nombres_jugadores.has(nombre)) {
+                nombres_repetidos = true;
+                return;
+            }
+            nombres_jugadores.add(nombre);
+        
+    })
+    if (!nombres_repetidos){
+        MostrarVista("home")
+    }else{
+        alert("Verifique que ningun nombre se repita")
+    }
+})
