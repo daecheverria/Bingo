@@ -113,6 +113,8 @@ document.querySelector("#boton_derecha").addEventListener("click", () => {
     CambioDerecha()
 });
 
+mkkkkk
+
 function CambioDerecha() {
     let nuevo_id = 0
     if(jugador_actual.id===4){
