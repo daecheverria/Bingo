@@ -19,9 +19,9 @@ document.querySelector("#iniciar").addEventListener("click", () => {
 });
 
 document.querySelector("#puntuaciones").addEventListener("click", () => {
+    crearTabla()
     MostrarVista("tabla")
 });
-
 
 document.querySelector("#volver_inicio").addEventListener("click", () => {
     MostrarVista("home")
@@ -103,11 +103,11 @@ function iniciarJuego() {
     jugadores.length = 0
     n = document.getElementById("n_bingo").value;
     numerosSalidos.clear();
-    pts_max = n*2 + 6;
-    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n),null)
-    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n),null)
-    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n),null)
-    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n),null)
+    pts_max = n * 2 + 6;
+    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n), null)
+    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n), null)
+    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n), null)
+    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n), null)
     jugadores.push(jugador1, jugador2, jugador3, jugador4);
     jugadores.forEach(jugador => {
         imprimirMatriz(jugador.carton, `bingo${jugador.id}`);
@@ -179,26 +179,29 @@ function CrearCartones(n) {
 
 function imprimirMatriz(matriz, tableroId) {
     let bingoDiv = document.getElementById(tableroId);
-    bingoDiv.innerHTML = ""; 
+    bingoDiv.innerHTML = "";
 
     for (let i = 0; i < matriz.length; i++) {
         let filaDiv = document.createElement("div");
-        filaDiv.classList.add("fila"); 
-        
+        filaDiv.classList.add("fila");
+
         for (let j = 0; j < matriz[i].length; j++) {
             let casillaDiv = document.createElement("div");
             casillaDiv.classList.add("casilla");
             casillaDiv.textContent = matriz[i][j];
             casillaDiv.id = `${tableroId}_${i}_${j}`
-            filaDiv.appendChild(casillaDiv); 
+            filaDiv.appendChild(casillaDiv);
         }
-        
-        bingoDiv.appendChild(filaDiv); 
+
+        bingoDiv.appendChild(filaDiv);
     }
 }
 
 document.querySelector("#boton_avanzar").addEventListener("click", () => {
     document.getElementById("turnos").innerText = parseInt(document.getElementById("turnos").innerText) + 1;
+    if (document.getElementById("turnos").innerText == 26) {
+        FinJuego()
+    }
     n = nuevoNumero();
     document.getElementById("numero").innerText = n;
     jugadores.forEach(jugador => {
@@ -207,45 +210,48 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                 if (num === n) {
                     let id = `bingo${jugador.id}_${i}_${j}`
                     document.getElementById(id)?.classList.add("aparecido")
-                    if(verificarFila(jugador.carton,i, jugador.id)){
+                    if (verificarFila(jugador.carton, i, jugador.id)) {
                         jugador.pts += 1
-                        if(jugador_actual===jugador){
+                        if (jugador_actual === jugador) {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }
-                    if(verificarColumna(jugador.carton,j, jugador.id)){
+                    if (verificarColumna(jugador.carton, j, jugador.id)) {
                         jugador.pts += 1
-                        if(jugador_actual===jugador){
+                        if (jugador_actual === jugador) {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }
-                    if(i==j){if(verificarDiagonal1(jugador.carton, jugador.id)){
-                        console.log(jugador.id,i,j)
-                        jugador.pts += 3
-                        if(jugador_actual===jugador){
-                            document.getElementById("puntos").innerText = jugador.pts
+                    if (i == j) {
+                        if (verificarDiagonal1(jugador.carton, jugador.id)) {
+                            console.log(jugador.id, i, j)
+                            jugador.pts += 3
+                            if (jugador_actual === jugador) {
+                                document.getElementById("puntos").innerText = jugador.pts
+                            }
                         }
-                    }}
-                    if(j==(jugador.carton.length-1-i)){if(verificarDiagonal2(jugador.carton, jugador.id)){
-                        jugador.pts += 3
-                        console.log(jugador.id, jugador.id,i,j)
-                        if(jugador_actual===jugador){
-                            document.getElementById("puntos").innerText = jugador.pts
+                    }
+                    if (j == (jugador.carton.length - 1 - i)) {
+                        if (verificarDiagonal2(jugador.carton, jugador.id)) {
+                            jugador.pts += 3
+                            if (jugador_actual === jugador) {
+                                document.getElementById("puntos").innerText = jugador.pts
+                            }
                         }
-                    }}
+                    }
                     console.log(jugador.id, jugador.pts)
                 }
             });
         });
     });
     jugadores.forEach(jugador => {
-        if(jugador.pts == pts_max){
+        if (jugador.pts == pts_max) {
             jugador.pts += 5
             console.log(jugador.pts)
         }
     });
     jugadores.forEach(jugador => {
-        if(jugador.pts == pts_max+5){
+        if (jugador.pts == pts_max + 5) {
             FinJuego()
         }
     });
@@ -276,9 +282,9 @@ function verificarColumna(matriz, indiceC, id) {
 }
 
 function verificarDiagonal1(matriz, id) {
-    
+
     let diagonal1 = true;
-    
+
     for (let i = 0; i < matriz.length; i++) {
         let casilla = document.getElementById(`bingo${id}_${i}_${i}`);
         if (!casilla.classList.contains("aparecido")) {
@@ -298,7 +304,7 @@ function verificarDiagonal2(matriz, id) {
             break;
         }
     }
-    
+
     return diagonal2;
 }
 let numerosSalidos = new Set();
@@ -312,22 +318,22 @@ function nuevoNumero() {
 
     numerosSalidos.add(n);
     return n;
-} 
+}
 
-function FinJuego(){
+function FinJuego() {
     MostrarVista("resultados")
-    jugadores.sort((a,b)=> b.pts-a.pts);
+    jugadores.sort((a, b) => b.pts - a.pts);
     tabla = JSON.parse(localStorage.getItem("puntuaciones") ?? "[]")
     jugadores.forEach(jugador => {
         const indice = tabla.findIndex(elemento => elemento.nombre == jugador.nombre);
         if (indice == -1) {
-            tabla.push({nombre: jugador.nombre, victorias: 0 });
-            jugador.victorias= 0;
-        }else{
-            jugador.victorias= tabla[indice].victorias;
+            tabla.push({ nombre: jugador.nombre, victorias: 0 });
+            jugador.victorias = 0;
+        } else {
+            jugador.victorias = tabla[indice].victorias;
         }
     });
-    if(jugadores[0].pts == jugadores[1].pts){
+    if (jugadores[0].pts == jugadores[1].pts) {
         document.getElementById("ganador").innerHTML = "Ha habido un empate";
     } else {
         document.getElementById("ganador").innerHTML = `Ha ganado ${jugadores[0].nombre}`;
@@ -336,8 +342,49 @@ function FinJuego(){
         tabla[indice_ganador].victorias += 1
     }
     for (let i = 0; i < 4; i++) {
-        document.getElementById(`Resultado${i+1}`).innerText = `${jugadores[i].nombre}: ${jugadores[i].pts}puntos (${jugadores[i].victorias} victoria(s))`;
+        document.getElementById(`Resultado${i + 1}`).innerText = `${jugadores[i].nombre}: ${jugadores[i].pts}puntos (${jugadores[i].victorias} victoria(s))`;
     }
     console.log(tabla)
     localStorage.setItem("puntuaciones", JSON.stringify(tabla))
+}
+
+function crearTabla() {
+    const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones") ?? "[]");
+    puntuaciones.sort((a, b) => b.victorias - a.victorias).slice(0, 10);
+    const tabla = document.getElementById("tabla_resultados");
+
+    tabla.innerHTML = "";
+    let contador = 0;
+    const fila = tabla.insertRow();
+    const posicion = fila.insertCell(0);
+    posicion.textContent = "Posicion"
+    const nombre = fila.insertCell(1);
+    nombre.textContent = "Nombre";
+    const victorias = fila.insertCell(2);
+    victorias.textContent = "Victorias";
+    puntuaciones.forEach(jugador => {
+        if (contador < 10) {
+            const fila = tabla.insertRow();
+            const posicion = fila.insertCell(0);
+            posicion.textContent = contador + 1;
+            const nombre = fila.insertCell(1);
+            const victorias = fila.insertCell(2);
+
+            nombre.textContent = jugador.nombre;
+            victorias.textContent = jugador.victorias;
+            contador += 1;
+        }
+    });
+    do {
+        const fila = tabla.insertRow();
+        const posicion = fila.insertCell(0);
+        posicion.textContent = contador + 1;
+        const nombre = fila.insertCell(1);
+        const victorias = fila.insertCell(2);
+
+        nombre.textContent = "";
+        victorias.textContent = "";
+        contador += 1;
+        console.log(contador)
+    } while (contador < 10)
 }

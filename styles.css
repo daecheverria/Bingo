@@ -150,3 +150,20 @@ button:disabled {
 .aparecido{
     background-color: gray;
 }
+
+#tabla_container{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+tr{
+    text-align: center;
+    background-color: white;
+}
+td{
+    border: solid 2px black;
+}
+table{
+    border-collapse: collapse;
+}
