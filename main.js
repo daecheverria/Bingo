@@ -31,6 +31,10 @@ document.querySelector("#volver_inicio2").addEventListener("click", () => {
     MostrarVista("home")
 });
 
+document.querySelector("#volver_inicio3").addEventListener("click", () => {
+    MostrarVista("home")
+});
+
 document.querySelector("#boton_reiniciar").addEventListener("click", () => {
     MostrarVista("inicio")
 });
@@ -79,11 +83,12 @@ boton_input.addEventListener('click', () => {
 })
 
 class Jugador {
-    constructor(id, nombre, pts, carton) {
+    constructor(id, nombre, pts, carton, victorias) {
         this.id = id
         this.nombre = nombre
         this.pts = pts
         this.carton = carton
+        this.victorias = victorias
     }
 }
 
@@ -99,10 +104,10 @@ function iniciarJuego() {
     n = document.getElementById("n_bingo").value;
     numerosSalidos.clear();
     pts_max = n*2 + 6;
-    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n))
-    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n))
-    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n))
-    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n))
+    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n),null)
+    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n),null)
+    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n),null)
+    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n),null)
     jugadores.push(jugador1, jugador2, jugador3, jugador4);
     jugadores.forEach(jugador => {
         imprimirMatriz(jugador.carton, `bingo${jugador.id}`);
@@ -228,7 +233,7 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }}
-                    console.log(jugador.pts)
+                    console.log(jugador.id, jugador.pts)
                 }
             });
         });
@@ -241,7 +246,7 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
     });
     jugadores.forEach(jugador => {
         if(jugador.pts == pts_max+5){
-            MostrarVista("home")
+            FinJuego()
         }
     });
 });
@@ -309,3 +314,30 @@ function nuevoNumero() {
     return n;
 } 
 
+function FinJuego(){
+    MostrarVista("resultados")
+    jugadores.sort((a,b)=> b.pts-a.pts);
+    tabla = JSON.parse(localStorage.getItem("puntuaciones") ?? "[]")
+    jugadores.forEach(jugador => {
+        const indice = tabla.findIndex(elemento => elemento.nombre == jugador.nombre);
+        if (indice == -1) {
+            tabla.push({nombre: jugador.nombre, victorias: 0 });
+            jugador.victorias= 0;
+        }else{
+            jugador.victorias= tabla[indice].victorias;
+        }
+    });
+    if(jugadores[0].pts == jugadores[1].pts){
+        document.getElementById("ganador").innerHTML = "Ha habido un empate";
+    } else {
+        document.getElementById("ganador").innerHTML = `Ha ganado ${jugadores[0].nombre}`;
+        jugadores[0].victorias += 1
+        const indice_ganador = tabla.findIndex(elemento => elemento.nombre == jugadores[0].nombre);
+        tabla[indice_ganador].victorias += 1
+    }
+    for (let i = 0; i < 4; i++) {
+        document.getElementById(`Resultado${i+1}`).innerText = `${jugadores[i].nombre}: ${jugadores[i].pts}puntos (${jugadores[i].victorias} victoria(s))`;
+    }
+    console.log(tabla)
+    localStorage.setItem("puntuaciones", JSON.stringify(tabla))
+}
