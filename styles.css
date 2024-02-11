@@ -100,6 +100,7 @@ button:disabled {
 
 }
 .boton_flecha{
+    flex-shrink: 2;
     border: none;
     background-color: transparent;
     cursor: pointer;
