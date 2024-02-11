@@ -8,6 +8,7 @@ body {
 }
 
 .vista {
+    flex-shrink: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
