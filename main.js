@@ -84,7 +84,7 @@ class Jugador {
 }
 
 let jugadores = []
-let jugador_actual = null
+let jugador_actual
 
 function iniciarJuego() {
     MostrarVista("juego")
@@ -173,11 +173,78 @@ function imprimirMatriz(matriz, tableroId) {
         for (let j = 0; j < matriz[i].length; j++) {
             let casillaDiv = document.createElement("div");
             casillaDiv.classList.add("casilla");
-            casillaDiv.textContent = matriz[i][j]; 
+            casillaDiv.textContent = matriz[i][j];
+            casillaDiv.id = `${tableroId}_${i}_${j}`
             filaDiv.appendChild(casillaDiv); 
         }
         
         bingoDiv.appendChild(filaDiv); 
     }
 }
+
+document.querySelector("#boton_avanzar").addEventListener("click", () => {
+    document.getElementById("turnos").innerText = parseInt(document.getElementById("turnos").innerText) + 1;
+    n = nuevoNumero();
+    document.getElementById("numero").innerText = n;
+    jugadores.forEach(jugador => {
+        jugador.carton.forEach((fila, i) => {
+            fila.forEach((num, j) => {
+                if (num === n) {
+                    let id = `bingo${jugador.id}_${i}_${j}`
+                    document.getElementById(id)?.classList.add("aparecido")
+                    if(verificarFila(jugador.carton,i, jugador.id)){
+                        jugador.pts += 1
+                        if(jugador_actual===jugador){
+                            document.getElementById("puntos").innerText = jugador.pts
+                        }
+                    }
+                    if(verificarColumna(jugador.carton,j, jugador.id)){
+                        jugador.pts += 1
+                        if(jugador_actual===jugador){
+                            document.getElementById("puntos").innerText = jugador.pts
+                        }
+                    }
+                }
+            });
+        });
+    });
+});
+
+function verificarFila(matriz, indiceF, id) {
+    let filaCompleta = true;
+    for (let j = 0; j < matriz.length; j++) {
+        let casilla = document.getElementById(`bingo${id}_${indiceF}_${j}`);
+        if (!casilla.classList.contains("aparecido")) {
+            filaCompleta = false;
+            break;
+        }
+    }
+    return filaCompleta;
+}
+
+function verificarColumna(matriz, indiceC, id) {
+    let columnaCompleta = true;
+    for (let i = 0; i < matriz.length; i++) {
+        let casilla = document.getElementById(`bingo${id}_${i}_${indiceC}`);
+        if (!casilla.classList.contains("aparecido")) {
+            columnaCompleta = false;
+            break;
+        }
+    }
+    return columnaCompleta;
+}
+
+
+let numerosSalidos = new Set();
+
+function nuevoNumero() {
+    let n;
+
+    do {
+        n = Math.floor(Math.random() * 50) + 1;
+    } while (numerosSalidos.has(n));
+
+    numerosSalidos.add(n);
+    return n;
+} 
 
