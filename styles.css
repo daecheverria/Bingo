@@ -168,3 +168,9 @@ td{
 table{
     border-collapse: collapse;
 }
+
+@media (max-width: 750px){
+    .vista{
+        max-width: 25vh;
+    }
+}
