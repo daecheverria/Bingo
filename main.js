@@ -6,6 +6,14 @@ function MostrarVista(id) {
     document.getElementById(id)?.classList.add("vista_activa")
 };
 
+function cambiarTableroActivo(id) {
+    document.querySelectorAll(".bingo_carton").forEach(carton => {
+        carton.classList.remove("activo");
+    });
+
+    const cartonActivo = document.getElementById(`bingo${id}`);
+    cartonActivo.classList.add("activo");
+}
 document.querySelector("#iniciar").addEventListener("click", () => {
     MostrarVista("inicio")
 });
@@ -74,19 +82,23 @@ class Jugador {
         this.carton = carton
     }
 }
+
 let jugadores = []
 let jugador_actual = null
+
 function iniciarJuego() {
     MostrarVista("juego")
     n = document.getElementById("n_bingo").value
-    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 1, CrearCartones(n))
-    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 2, CrearCartones(n))
-    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 3, CrearCartones(n))
-    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 4, CrearCartones(n))
+    let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n))
+    let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n))
+    let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n))
+    let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n))
     jugadores.push(jugador1, jugador2, jugador3, jugador4);
+    jugadores.forEach(jugador => {
+        imprimirMatriz(jugador.carton, `bingo${jugador.id}`);
+    });
     document.getElementById("jugador_actual").innerText = jugador1.nombre
     jugador_actual = jugador1
-    imprimirMatriz(jugador1.carton)
     jugadores.forEach(jugador => {
         console.log(`ID: ${jugador.id}, Nombre: ${jugador.nombre}, Puntos: ${jugador.pts}, Carton: ${jugador.carton}`)
     })
@@ -110,7 +122,7 @@ function CambioIzquierda() {
     let nuevo_jugador = BuscarPorId(nuevo_id)
     document.getElementById("jugador_actual").innerText = nuevo_jugador.nombre
     document.getElementById("puntos").innerText = nuevo_jugador.pts
-    imprimirMatriz(nuevo_jugador.carton)
+    cambiarTableroActivo(nuevo_jugador.id)
     jugador_actual = nuevo_jugador
 }
 document.querySelector("#boton_derecha").addEventListener("click", () => {
@@ -127,7 +139,7 @@ function CambioDerecha() {
     let nuevo_jugador = BuscarPorId(nuevo_id)
     document.getElementById("jugador_actual").innerText = nuevo_jugador.nombre
     document.getElementById("puntos").innerText = nuevo_jugador.pts
-    imprimirMatriz(nuevo_jugador.carton)
+    cambiarTableroActivo(nuevo_jugador.id)
     jugador_actual = nuevo_jugador
 }
 
@@ -150,8 +162,8 @@ function CrearCartones(n) {
     return carton;
 }
 
-function imprimirMatriz(matriz) {
-    let bingoDiv = document.getElementById("bingo");
+function imprimirMatriz(matriz, tableroId) {
+    let bingoDiv = document.getElementById(tableroId);
     bingoDiv.innerHTML = ""; 
 
     for (let i = 0; i < matriz.length; i++) {
@@ -168,3 +180,4 @@ function imprimirMatriz(matriz) {
         bingoDiv.appendChild(filaDiv); 
     }
 }
+
