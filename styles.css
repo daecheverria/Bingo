@@ -96,7 +96,7 @@ button:disabled {
     gap: 4px 16px;
     align-items: center;
     min-width: auto;
-    max-width: fit-content;
+    max-width: calc(100%-8px);
 
 }
 .boton_flecha{
