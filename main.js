@@ -31,6 +31,10 @@ document.querySelector("#volver_inicio2").addEventListener("click", () => {
     MostrarVista("home")
 });
 
+document.querySelector("#boton_reiniciar").addEventListener("click", () => {
+    MostrarVista("inicio")
+});
+
 const input_num = document.getElementById("n_bingo");
 input_num.addEventListener("input", () => {
     const n = input_num.value
@@ -83,12 +87,18 @@ class Jugador {
     }
 }
 
-let jugadores = []
-let jugador_actual
-
+let jugadores = [];
+let jugador_actual;
+let pts_max;
 function iniciarJuego() {
-    MostrarVista("juego")
-    n = document.getElementById("n_bingo").value
+    MostrarVista("juego");
+    document.getElementById("turnos").innerHTML = 0;
+    document.getElementById("numero").innerHTML = 0;
+    document.getElementById("puntos").innerHTML = 0;
+    jugadores.length = 0
+    n = document.getElementById("n_bingo").value;
+    numerosSalidos.clear();
+    pts_max = n*2 + 6;
     let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n))
     let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n))
     let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n))
@@ -218,9 +228,21 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }}
+                    console.log(jugador.pts)
                 }
             });
         });
+    });
+    jugadores.forEach(jugador => {
+        if(jugador.pts == pts_max){
+            jugador.pts += 5
+            console.log(jugador.pts)
+        }
+    });
+    jugadores.forEach(jugador => {
+        if(jugador.pts == pts_max+5){
+            MostrarVista("home")
+        }
     });
 });
 
