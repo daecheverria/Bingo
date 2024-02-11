@@ -5,6 +5,7 @@ body {
     align-items: center;
     padding: 32px;
     font-family: Arial, Helvetica, sans-serif;
+    margin: 0 8px;
 }
 
 .vista {
@@ -16,7 +17,7 @@ body {
     gap: 16px;
     padding: 12px;
     min-height: 50vh;
-    min-width: 50vh;
+    min-width: 50vw;
     background-color: rgb(0, 153, 255);
     border-radius: 4px;
     border: solid 2px black;
@@ -167,10 +168,4 @@ td{
 }
 table{
     border-collapse: collapse;
-}
-
-@media (max-width: 750px){
-    .vista{
-        max-width: 25vh;
-    }
 }
