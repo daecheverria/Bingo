@@ -123,3 +123,22 @@ button:disabled {
     border-left: 10px solid  black;
     border-bottom: 10px solid transparent;
 }
+
+#bingo {
+    gap: 5px;
+    display: grid;
+}
+
+.fila {
+    display: flex;
+    gap: 5px;
+    justify-content: space-between; 
+}
+
+.casilla {
+    flex: 1;
+    border: 1px solid black; 
+    padding: 10px; 
+    text-align: center; 
+    background-color: white;
+}
