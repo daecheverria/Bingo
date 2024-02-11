@@ -204,6 +204,20 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }
+                    if(i==j){if(verificarDiagonal1(jugador.carton, jugador.id)){
+                        console.log(jugador.id,i,j)
+                        jugador.pts += 3
+                        if(jugador_actual===jugador){
+                            document.getElementById("puntos").innerText = jugador.pts
+                        }
+                    }}
+                    if(j==(jugador.carton.length-1-i)){if(verificarDiagonal2(jugador.carton, jugador.id)){
+                        jugador.pts += 3
+                        console.log(jugador.id, jugador.id,i,j)
+                        if(jugador_actual===jugador){
+                            document.getElementById("puntos").innerText = jugador.pts
+                        }
+                    }}
                 }
             });
         });
@@ -234,7 +248,32 @@ function verificarColumna(matriz, indiceC, id) {
     return columnaCompleta;
 }
 
+function verificarDiagonal1(matriz, id) {
+    
+    let diagonal1 = true;
+    
+    for (let i = 0; i < matriz.length; i++) {
+        let casilla = document.getElementById(`bingo${id}_${i}_${i}`);
+        if (!casilla.classList.contains("aparecido")) {
+            diagonal1 = false;
+            break;
+        }
+    }
+    return diagonal1
+}
+function verificarDiagonal2(matriz, id) {
+    let diagonal2 = true;
 
+    for (let i = 0; i < matriz.length; i++) {
+        let casilla = document.getElementById(`bingo${id}_${i}_${matriz.length - 1 - i}`);
+        if (!casilla.classList.contains("aparecido")) {
+            diagonal2 = false;
+            break;
+        }
+    }
+    
+    return diagonal2;
+}
 let numerosSalidos = new Set();
 
 function nuevoNumero() {
