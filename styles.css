@@ -103,7 +103,6 @@ button:disabled {
     border: none;
     background-color: transparent;
     cursor: pointer;
-    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,10 +167,4 @@ td{
 }
 table{
     border-collapse: collapse;
-}
-
-@media(max-width:900px){
-    .boton_flecha{
-        background-color: transparent;
-    }
 }

@@ -39,15 +39,6 @@ document.querySelector("#boton_reiniciar").addEventListener("click", () => {
     MostrarVista("inicio")
 });
 
-const input_num = document.getElementById("n_bingo");
-input_num.addEventListener("input", () => {
-    const n = input_num.value
-    if (n < 3) {
-        input_num.value = 3
-    } else if (n > 5) {
-        input_num.value = 5
-    }
-})
 const inputs = document.querySelectorAll("input");
 const boton_input = document.getElementById("inicio_bingo");
 
@@ -57,7 +48,10 @@ inputs.forEach(input => {
 
 function ValidarInputs() {
     const input_completo = Array.from(inputs).every(input => input.value.trim() !== "");
-    boton_input.disabled = !input_completo;
+    input_num = document.getElementById("n_bingo").value;
+    const num_valido = input_num >= 3 && input_num <= 5;
+    boton_input.disabled = !input_completo  || !num_valido;
+
 }
 
 const nombres = document.querySelectorAll(".input_jugador");
