@@ -14,7 +14,7 @@ body {
     justify-content: center;
     align-items: center;
     gap: 16px;
-    padding: 24px;
+    padding: 12px;
     min-height: 50vh;
     min-width: 50vh;
     background-color: rgb(0, 153, 255);
