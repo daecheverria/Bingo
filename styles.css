@@ -93,14 +93,13 @@ button:disabled {
 
 #botones_bingo{
     display: flex;
-    gap: 16px;
+    gap: 4px 16px;
     align-items: center;
     min-width: auto;
     max-width: fit-content;
 
 }
 .boton_flecha{
-    flex-shrink: 2;
     border: none;
     background-color: transparent;
     cursor: pointer;
