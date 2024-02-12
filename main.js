@@ -1,4 +1,4 @@
-
+// desactiva la visibilidad de todas las vistas y luego activa la que se le paso como parametro
 function MostrarVista(id) {
     document.querySelectorAll(".vista").forEach(vista => {
         vista.classList.remove("vista_activa")
@@ -6,6 +6,7 @@ function MostrarVista(id) {
     document.getElementById(id)?.classList.add("vista_activa")
 };
 
+// similar a lo anterior, hace que solo el carton del jugador que se paso como parametro este visible
 function cambiarTableroActivo(id) {
     document.querySelectorAll(".bingo_carton").forEach(carton => {
         carton.classList.remove("activo");
@@ -14,6 +15,8 @@ function cambiarTableroActivo(id) {
     const cartonActivo = document.getElementById(`bingo${id}`);
     cartonActivo.classList.add("activo");
 }
+
+// event listeners para cada boton de modo que al hacerles click cambien la vista activa
 document.querySelector("#iniciar").addEventListener("click", () => {
     MostrarVista("inicio")
 });
@@ -39,13 +42,16 @@ document.querySelector("#boton_reiniciar").addEventListener("click", () => {
     MostrarVista("inicio")
 });
 
+// inicializar variables para las siguientes funciones. Una con todos los inputs y otra con el boton de iniciar partida
 const inputs = document.querySelectorAll("input");
 const boton_input = document.getElementById("inicio_bingo");
 
+// event listeners para que cada vez que se modifique un input se compruebe si se puede habilitar el boton de inicio
 inputs.forEach(input => {
     input.addEventListener("input", ValidarInputs)
 })
 
+// valida si cada input tiene contenido y el numero esta entre 3 y 5. Si se cumplen ambas condiciones, se activa el boton
 function ValidarInputs() {
     const input_completo = Array.from(inputs).every(input => input.value.trim() !== "");
     input_num = document.getElementById("n_bingo").value;
@@ -54,8 +60,10 @@ function ValidarInputs() {
 
 }
 
+// variable con los nombres de los jugadores introducidos en los inputs
 const nombres = document.querySelectorAll(".input_jugador");
 
+// verifica si los nombres estan repetidos. Si no lo estan avanza al juego. De lo contrario avisa al usuario
 boton_input.addEventListener('click', () => {
     const nombres_jugadores = new Set();
     let nombres_repetidos = false;
@@ -76,6 +84,8 @@ boton_input.addEventListener('click', () => {
     }
 })
 
+
+// creacion del objeto persona
 class Jugador {
     constructor(id, nombre, pts, carton, victorias) {
         this.id = id
@@ -86,41 +96,52 @@ class Jugador {
     }
 }
 
+// inicializa un array donde estaran los jugadores, el jugador que se esta mostrando en pantalla y la puntuacion maxima
 let jugadores = [];
 let jugador_actual;
 let pts_max;
+
 function iniciarJuego() {
+    // cambia de vista y asegura que los datos se reinicien al iniciar una nueva partida
     MostrarVista("juego");
     document.getElementById("turnos").innerHTML = 0;
     document.getElementById("numero").innerHTML = 0;
     document.getElementById("puntos").innerHTML = 0;
     jugadores.length = 0
+    // calcula la puntuacion maxima dependiendo del tamano del carton y elimina los numeros que habian salido en la partida anterior en caso de reinicio
     n = document.getElementById("n_bingo").value;
     numerosSalidos.clear();
     pts_max = n * 2 + 6;
+    // crea a los jugadores y los guarda en un array para manipularlos con mayor facilidad posteriormente. Las victorias se calculan al final de la partida
     let jugador1 = new Jugador(1, document.getElementById("jugador1").value, 0, CrearCartones(n), null)
     let jugador2 = new Jugador(2, document.getElementById("jugador2").value, 0, CrearCartones(n), null)
     let jugador3 = new Jugador(3, document.getElementById("jugador3").value, 0, CrearCartones(n), null)
     let jugador4 = new Jugador(4, document.getElementById("jugador4").value, 0, CrearCartones(n), null)
     jugadores.push(jugador1, jugador2, jugador3, jugador4);
+    //crea los cartones para cada jugador en el HTML
     jugadores.forEach(jugador => {
         imprimirMatriz(jugador.carton, `bingo${jugador.id}`);
     });
+    // establece por defecto al jugador 1 como el actual
     document.getElementById("jugador_actual").innerText = jugador1.nombre
     jugador_actual = jugador1
+    // console.log para verificar la creacion correcta de los jugadores
     jugadores.forEach(jugador => {
         console.log(`ID: ${jugador.id}, Nombre: ${jugador.nombre}, Puntos: ${jugador.pts}, Carton: ${jugador.carton}`)
     })
 }
 
-document.querySelector("#boton_izquierda").addEventListener("click", () => {
-    CambioIzquierda()
-});
-
+//busca a un jugador por su id 
 function BuscarPorId(id) {
     return jugadores.find(jugador => jugador.id === id);
 }
 
+//event listener para la flecha de la izquierda
+document.querySelector("#boton_izquierda").addEventListener("click", () => {
+    CambioIzquierda()
+});
+
+//cambia el jugador que se esta viendo y muestra sus datos correspondiente. Se mueve de forma 4-3-2-1-4
 function CambioIzquierda() {
     let nuevo_id = 0
     if (jugador_actual.id === 1) {
@@ -134,6 +155,8 @@ function CambioIzquierda() {
     cambiarTableroActivo(nuevo_jugador.id)
     jugador_actual = nuevo_jugador
 }
+
+//igual que lo anterior pero para la flecha derecha. El cambio ahora se hace en orden 1-2-3-4-1
 document.querySelector("#boton_derecha").addEventListener("click", () => {
     CambioDerecha()
 });
@@ -152,14 +175,17 @@ function CambioDerecha() {
     jugador_actual = nuevo_jugador
 }
 
+//crea las matrices nxn de cada jugador segun el tamano pasado como parametro
 function CrearCartones(n) {
     let tamano = n;
     let carton = [];
+    // guarda los numeros que ya se han colocado en la matriz
     let numeros = [];
     for (let i = 0; i < tamano; i++) {
         carton[i] = [];
         for (let j = 0; j < tamano; j++) {
             let numero;
+            // coloca numeros entre 1 y 50 en la matriz y se repite hasta que se llene con numeros unicos
             do {
                 numero = Math.floor(Math.random() * 50) + 1;
             } while (numeros.includes(numero));
@@ -167,10 +193,13 @@ function CrearCartones(n) {
             numeros.push(numero);
         }
     }
+    // verificacion de creacion correcta de matriz
     console.log(carton);
     return carton;
 }
 
+//crea los elementos necesarios para la creacion del carton. 
+//A cada casilla se le asigna el valor correspondiente de la matriz y se le da un id unico
 function imprimirMatriz(matriz, tableroId) {
     let bingoDiv = document.getElementById(tableroId);
     bingoDiv.innerHTML = "";
@@ -191,13 +220,18 @@ function imprimirMatriz(matriz, tableroId) {
     }
 }
 
+
 document.querySelector("#boton_avanzar").addEventListener("click", () => {
+    //va pasando los turnos y acaba el juego si ya han pasado 25
     document.getElementById("turnos").innerText = parseInt(document.getElementById("turnos").innerText) + 1;
     if (document.getElementById("turnos").innerText == 26) {
         FinJuego()
     }
+    //obtiene el numero que sale del bingo y lo muestra en pantalla 
     n = nuevoNumero();
     document.getElementById("numero").innerText = n;
+    //verifica en cada jugador si el numero salido coincido con alguno de su carton
+    // de ser asi cambia el color de la casilla y suma los puntos correspondientes de darse el caso
     jugadores.forEach(jugador => {
         jugador.carton.forEach((fila, i) => {
             fila.forEach((num, j) => {
@@ -216,6 +250,7 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                             document.getElementById("puntos").innerText = jugador.pts
                         }
                     }
+                    //solo verifica las diagonales si la casilla esta en la diagonal correspondiente
                     if (i == j) {
                         if (verificarDiagonal1(jugador.carton, jugador.id)) {
                             console.log(jugador.id, i, j)
@@ -233,17 +268,21 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
                             }
                         }
                     }
-                    console.log(jugador.id, jugador.pts)
+                    //verifica si se cambio la puntuacion y a quien
+                    console.log(jugador.id, jugador.pts);
                 }
             });
         });
     });
+    // verifica si algun jugador completo el tablero y suma los puntos por hacerlo
     jugadores.forEach(jugador => {
         if (jugador.pts == pts_max) {
             jugador.pts += 5
+            // verifica si la suma total esta bien
             console.log(jugador.pts)
         }
     });
+    // termina el juego despues de que el/los jugadores que completaron el tablero sumen los puntos
     jugadores.forEach(jugador => {
         if (jugador.pts == pts_max + 5) {
             FinJuego()
@@ -251,6 +290,7 @@ document.querySelector("#boton_avanzar").addEventListener("click", () => {
     });
 });
 
+// verifican si la fila/columna/diagonal de la casilla esta completa
 function verificarFila(matriz, indiceF, id) {
     let filaCompleta = true;
     for (let j = 0; j < matriz.length; j++) {
@@ -301,8 +341,11 @@ function verificarDiagonal2(matriz, id) {
 
     return diagonal2;
 }
+
+// aqui se guardan los numeros que vayan saliendo en el bingo 
 let numerosSalidos = new Set();
 
+//genera un numero aleatorio entre el 1 y 50 para el bingo y asegura que no haya salido antes
 function nuevoNumero() {
     let n;
 
@@ -314,9 +357,12 @@ function nuevoNumero() {
     return n;
 }
 
+
 function FinJuego() {
+    // cambia vista y ordena a los jugadores segun su puntuacion
     MostrarVista("resultados")
     jugadores.sort((a, b) => b.pts - a.pts);
+    // obtiene la tabla de victorias. Si el jugador no existia, lo anade. De lo contrario le asigna las victorias que ya tenia
     tabla = JSON.parse(localStorage.getItem("puntuaciones") ?? "[]")
     jugadores.forEach(jugador => {
         const indice = tabla.findIndex(elemento => elemento.nombre == jugador.nombre);
@@ -327,6 +373,7 @@ function FinJuego() {
             jugador.victorias = tabla[indice].victorias;
         }
     });
+    //Si hay empate lo muestra en pantalla. Si no, le suma una victoria al ganador.
     if (jugadores[0].pts == jugadores[1].pts) {
         document.getElementById("ganador").innerHTML = "Ha habido un empate";
     } else {
@@ -335,20 +382,25 @@ function FinJuego() {
         const indice_ganador = tabla.findIndex(elemento => elemento.nombre == jugadores[0].nombre);
         tabla[indice_ganador].victorias += 1
     }
+    // Muestra en pantalla a los jugadores con los puntos obtenidos durante la partida y su total de victorias
     for (let i = 0; i < 4; i++) {
         document.getElementById(`Resultado${i + 1}`).innerText = `${jugadores[i].nombre}: ${jugadores[i].pts}puntos (${jugadores[i].victorias} victoria(s))`;
     }
+    //verifica los valores y guarda los resultados 
     console.log(tabla)
     localStorage.setItem("puntuaciones", JSON.stringify(tabla))
 }
 
 function crearTabla() {
+    // obtiene las victorias y las ordena de mayor a menor
     const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones") ?? "[]");
     puntuaciones.sort((a, b) => b.victorias - a.victorias).slice(0, 10);
     const tabla = document.getElementById("tabla_resultados");
-
+    // elimina la tabla para volver a crearla
     tabla.innerHTML = "";
+    //inicializa contador de las filas de la tabla
     let contador = 0;
+    // crea la fila de titulos de la tabla
     const fila = tabla.insertRow();
     const posicion = fila.insertCell(0);
     posicion.textContent = "Posicion"
@@ -356,6 +408,7 @@ function crearTabla() {
     nombre.textContent = "Nombre";
     const victorias = fila.insertCell(2);
     victorias.textContent = "Victorias";
+    // crea filas para cada jugador e inserta su nombre y victorias (y posicion en la tabla)
     puntuaciones.forEach(jugador => {
         if (contador < 10) {
             const fila = tabla.insertRow();
@@ -369,16 +422,17 @@ function crearTabla() {
             contador += 1;
         }
     });
-    do {
-        const fila = tabla.insertRow();
-        const posicion = fila.insertCell(0);
-        posicion.textContent = contador + 1;
-        const nombre = fila.insertCell(1);
-        const victorias = fila.insertCell(2);
+    // si se crean menos de 10 filas porque aun hay menos de 10 jugadores registrados, crea filas vacias
+    if(contador<10){    do {
+            const fila = tabla.insertRow();
+            const posicion = fila.insertCell(0);
+            posicion.textContent = contador + 1;
+            const nombre = fila.insertCell(1);
+            const victorias = fila.insertCell(2);
 
-        nombre.textContent = "";
-        victorias.textContent = "";
-        contador += 1;
-        console.log(contador)
-    } while (contador < 10)
+            nombre.textContent = "";
+            victorias.textContent = "";
+            contador += 1;
+            console.log(contador)
+        } while (contador < 10)}
 }
